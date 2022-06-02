@@ -107,17 +107,18 @@ const Home = ({ user, logout }) => {
         };
 
         setConversations((prev) => [newConvo, ...prev]);
-      }
-      const updateConversations = conversations.map((convo) => {
-        if (convo.id === message.conversationId) {
-          const messages = [...convo.messages, message];
-          let latestMessageText = message.text;
-          return { ...convo, messages, latestMessageText };
-        }
-        return { ...convo };
-      });
+      } else {
+        const updateConversations = conversations.map((convo) => {
+          if (convo.id === message.conversationId) {
+            const messages = [...convo.messages, message];
+            let latestMessageText = message.text;
+            return { ...convo, messages, latestMessageText };
+          }
+          return { ...convo };
+        });
 
-      setConversations(updateConversations);
+        setConversations(updateConversations);
+      }
     },
     [setConversations, conversations]
   );
