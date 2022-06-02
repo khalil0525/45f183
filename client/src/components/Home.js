@@ -106,7 +106,7 @@ const Home = ({ user, logout }) => {
         setConversations((prev) => [newConvo, ...prev]);
       }
 
-      const updatedConversations = conversations.map((convo) => {
+      const updateConversations = conversations.map((convo) => {
         if (convo.id === message.conversationId) {
           const messages = [...convo.messages, message];
           let latestMessageText = message.text;
@@ -115,7 +115,7 @@ const Home = ({ user, logout }) => {
         return { ...convo };
       });
 
-      setConversations(updatedConversations);
+      setConversations(updateConversations);
     },
     [setConversations, conversations]
   );
