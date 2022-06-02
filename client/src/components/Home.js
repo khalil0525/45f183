@@ -65,7 +65,6 @@ const Home = ({ user, logout }) => {
   const postMessage = async (body) => {
     try {
       const data = await saveMessage(body);
-
       if (!body.conversationId) {
         addNewConvo(body.recipientId, data.message);
       } else {
@@ -97,8 +96,9 @@ const Home = ({ user, logout }) => {
   const addMessageToConversation = useCallback(
     (data) => {
       // if sender isn't null, that means the message needs to be put in a brand new convo
-      const { message, sender = null } = data;
-      if (sender !== null) {
+
+      const { recipientId, message, sender = null } = data;
+      if (sender !== null && recipientId === user.id) {
         const newConvo = {
           id: message.conversationId,
           otherUser: sender,
@@ -107,7 +107,7 @@ const Home = ({ user, logout }) => {
         };
 
         setConversations((prev) => [newConvo, ...prev]);
-      } else {
+      } else if (recipientId === user.id || message.senderId === user.id) {
         const updateConversations = conversations.map((convo) => {
           if (convo.id === message.conversationId) {
             const messages = [...convo.messages, message];
@@ -120,7 +120,7 @@ const Home = ({ user, logout }) => {
         setConversations(updateConversations);
       }
     },
-    [setConversations, conversations]
+    [setConversations, conversations, user.id]
   );
 
   const setActiveChat = (username) => {
