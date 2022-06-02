@@ -106,13 +106,16 @@ const Home = ({ user, logout }) => {
         setConversations((prev) => [newConvo, ...prev]);
       }
 
-      conversations.forEach((convo) => {
+      const updatedConversations = conversations.map((convo) => {
         if (convo.id === message.conversationId) {
-          convo.messages.push(message);
-          convo.latestMessageText = message.text;
+          const messages = [...convo.messages, message];
+          let latestMessageText = message.text;
+          return { ...convo, messages, latestMessageText };
         }
+        return { ...convo };
       });
-      setConversations(conversations);
+
+      setConversations(updatedConversations);
     },
     [setConversations, conversations]
   );
@@ -198,9 +201,9 @@ const Home = ({ user, logout }) => {
       await logout(user.id);
     }
   };
-  // useEffect(() => {
-  //   console.log(conversations);
-  // }, [conversations]);
+  useEffect(() => {
+    console.log(conversations);
+  });
   return (
     <>
       <Button onClick={handleLogout}>Logout</Button>
