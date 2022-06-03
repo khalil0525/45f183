@@ -61,7 +61,14 @@ const Home = ({ user, logout }) => {
       sender: data.sender,
     });
   };
-
+  const postUpdate = async (body) => {
+    try {
+      const data = await saveMessage(body);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const postMessage = async (body) => {
     try {
       const data = await saveMessage(body);
@@ -224,6 +231,7 @@ const Home = ({ user, logout }) => {
           conversations={conversations}
           user={user}
           postMessage={postMessage}
+          postUpdate={postUpdate}
         />
       </Grid>
     </>
