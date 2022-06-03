@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     color: "#9CADC8",
     letterSpacing: -0.17,
   },
+  boldPreviewText: {
+    color: "black",
+    fontWeight: "600",
+  },
 }));
 
 const ChatContent = ({ conversation }) => {
@@ -32,7 +36,12 @@ const ChatContent = ({ conversation }) => {
         <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
-        <Typography className={classes.previewText}>
+        <Typography
+          className={`${
+            !conversation.messages[conversation.messages.length - 1].isRead &&
+            classes.boldPreviewText
+          } ${classes.previewText}`}
+        >
           {latestMessageText}
         </Typography>
       </Box>

@@ -76,7 +76,9 @@ const Home = ({ user, logout }) => {
       console.error(error);
     }
   };
-
+  useEffect(() => {
+    console.log(conversations);
+  });
   const addNewConvo = useCallback(
     (recipientId, message) => {
       const addNewConvoInConversations = conversations.map((convo) => {
