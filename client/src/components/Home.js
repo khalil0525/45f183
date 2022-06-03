@@ -61,14 +61,63 @@ const Home = ({ user, logout }) => {
       sender: data.sender,
     });
   };
+  const readMessage = (data, body) => {
+    socket.emit("read-messages", {
+      messages: data.messages[1],
+      recipientId: body.recipientId,
+      sender: data.sender,
+    });
+  };
   const postUpdate = async (body) => {
     try {
       const data = await saveMessage(body);
-      console.log(data);
+      updateMessagesToReadInConversation({ data, body });
+      readMessage(data, body);
     } catch (error) {
       console.error(error);
     }
   };
+
+  //ONLY WORKS FOR THE USER THAT IS CLEARING THE READ. NEEDS WORK
+  const updateMessagesToReadInConversation = useCallback(
+    (data) => {
+      // if sender isn't null, that means the message needs to be put in a brand new convo
+      // make table of current users so we can lookup faster
+      const { messages, sender } = data.data;
+      const { body } = data;
+
+      if (body.recipientId.id === user.id || sender === user.id) {
+        const conversation = conversations
+          ? conversations.find(
+              (conversation) =>
+                conversation.id === messages[1][0].conversationId
+            )
+          : {};
+
+        const newConversation = [...conversation.messages];
+        const updateConversation = newConversation.map((message) => {
+          const index = messages[1].findIndex((msg) => msg.id === message.id);
+
+          if (index !== -1) {
+            return messages[1][index];
+          }
+          return message;
+        });
+        let convoId = messages[1][0].conversationId;
+        const updateConversations = conversations.map((convo) => {
+          if (convo.id === convoId) {
+            const messages = [...updateConversation];
+
+            return { ...convo, messages };
+          }
+          return { ...convo };
+        });
+        setConversations(updateConversations);
+      }
+    },
+    [setConversations, conversations, user.id]
+  );
+
   const postMessage = async (body) => {
     try {
       const data = await saveMessage(body);
@@ -83,9 +132,7 @@ const Home = ({ user, logout }) => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    console.log(conversations);
-  });
+
   const addNewConvo = useCallback(
     (recipientId, message) => {
       const addNewConvoInConversations = conversations.map((convo) => {
@@ -171,15 +218,22 @@ const Home = ({ user, logout }) => {
     socket.on("add-online-user", addOnlineUser);
     socket.on("remove-offline-user", removeOfflineUser);
     socket.on("new-message", addMessageToConversation);
-
+    socket.on("read-messages", updateMessagesToReadInConversation);
     return () => {
       // before the component is destroyed
       // unbind all event handlers used in this component
       socket.off("add-online-user", addOnlineUser);
       socket.off("remove-offline-user", removeOfflineUser);
       socket.off("new-message", addMessageToConversation);
+      socket.off("read-messages", updateMessagesToReadInConversation);
     };
-  }, [addMessageToConversation, addOnlineUser, removeOfflineUser, socket]);
+  }, [
+    addMessageToConversation,
+    updateMessagesToReadInConversation,
+    addOnlineUser,
+    removeOfflineUser,
+    socket,
+  ]);
 
   useEffect(() => {
     // when fetching, prevent redirect

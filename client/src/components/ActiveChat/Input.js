@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -57,12 +57,9 @@ const Input = ({
         sender: otherUser.id,
       };
       await postUpdate(reqBody);
-      console.log("Clear read messages");
     }
   };
-  useEffect(() => {
-    console.log(messages);
-  });
+
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <FormControl fullWidth hiddenLabel>
