@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { Badge } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -26,7 +26,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatContent = ({ conversation }) => {
   const classes = useStyles();
-
+  // useEffect(() => {
+  //   console.log(conversation.messages);
+  // });
   const { otherUser } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
 
@@ -45,6 +47,7 @@ const ChatContent = ({ conversation }) => {
           {latestMessageText}
         </Typography>
       </Box>
+      <Badge badgeContent={4} color="secondary"></Badge>
     </Box>
   );
 };
