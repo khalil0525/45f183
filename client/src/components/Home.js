@@ -102,8 +102,8 @@ const Home = ({ user, logout }) => {
     (data) => {
       // if sender isn't null, that means the message needs to be put in a brand new convo
 
-      const { recipientId, message, sender = null } = data;
-      if (sender !== null && recipientId === user.id) {
+      const { message, sender = null } = data;
+      if (sender !== null) {
         const newConvo = {
           id: message.conversationId,
           otherUser: sender,
@@ -112,7 +112,7 @@ const Home = ({ user, logout }) => {
         };
 
         setConversations((prev) => [newConvo, ...prev]);
-      } else if (recipientId === user.id || message.senderId === user.id) {
+      } else if (message.senderId === user.id) {
         const updateConversations = conversations.map((convo) => {
           if (convo.id === message.conversationId) {
             const messages = [...convo.messages, message];
