@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Badge } from "@material-ui/core";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -22,6 +23,14 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontWeight: "600",
   },
+  badge: {
+    borderRadius: 10,
+    backgroundColor: "#3F92FF",
+    alignSelf: "center",
+    marginRight: 40,
+    colorPrimary: "#3F92FF",
+    padding: 0,
+  },
 }));
 
 const ChatContent = ({ conversation }) => {
@@ -32,22 +41,23 @@ const ChatContent = ({ conversation }) => {
   const { otherUser } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
 
+  const messageRead =
+    conversation.messages[conversation.messages.length - 1]?.senderId ===
+      otherUser.id &&
+    !conversation.messages[conversation.messages.length - 1]?.isRead &&
+    classes.boldPreviewText;
+
   return (
     <Box className={classes.root}>
       <Box>
         <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
-        <Typography
-          className={`${
-            !conversation.messages[conversation.messages.length - 1].isRead &&
-            classes.boldPreviewText
-          } ${classes.previewText}`}
-        >
+        <Typography className={`${messageRead} ${classes.previewText}`}>
           {latestMessageText}
         </Typography>
       </Box>
-      <Badge badgeContent={4} color="secondary"></Badge>
+      <Badge badgeContent={12} className={classes.badge} color="primary" />
     </Box>
   );
 };
