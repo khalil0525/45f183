@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -40,13 +40,21 @@ const Input = ({ otherUser, conversationId, user, postMessage, messages }) => {
   const handleFocus = async () => {
     if (
       messages.length > 0 &&
-      messages[messages.length - 1].senderId !== user.Id &&
+      messages[messages.length - 1].senderId === otherUser.id &&
       !messages[messages.length - 1].isRead
     ) {
+      const reqBody = {
+        text: null,
+        recipientId: null,
+        conversationId,
+        sender: otherUser.id,
+      };
       console.log("Clear read messages");
     }
   };
-
+  useEffect(() => {
+    console.log(messages);
+  });
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <FormControl fullWidth hiddenLabel>
