@@ -18,10 +18,11 @@ router.post("/", async (req, res, next) => {
         },
         {
           where: {
-            senderId: senderId,
+            senderId: sender,
             conversationId: conversationId,
             isRead: 0,
           },
+          returning: true,
         }
       );
       return res.json({ updateMessages, sender });
