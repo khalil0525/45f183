@@ -15,7 +15,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Input = ({ otherUser, conversationId, user, postMessage, messages }) => {
+const Input = ({
+  otherUser,
+  conversationId,
+  user,
+  postMessage,
+  postUpdate,
+  messages,
+}) => {
   const classes = useStyles();
   const [text, setText] = useState("");
 
@@ -49,6 +56,7 @@ const Input = ({ otherUser, conversationId, user, postMessage, messages }) => {
         conversationId,
         sender: otherUser.id,
       };
+      await postUpdate(reqBody);
       console.log("Clear read messages");
     }
   };
