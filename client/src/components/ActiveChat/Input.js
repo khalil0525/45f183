@@ -52,7 +52,7 @@ const Input = ({
     ) {
       const reqBody = {
         text: null,
-        recipientId: null,
+        recipientId: user,
         conversationId,
         sender: otherUser.id,
       };
