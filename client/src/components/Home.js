@@ -93,10 +93,6 @@ const Home = ({ user, logout }) => {
     );
   }, []);
 
-  useEffect(() => {
-    console.log(conversations);
-  });
-
   const addMessageToConversation = useCallback((data) => {
     // if sender isn't null, that means the message needs to be put in a brand new convo
 
