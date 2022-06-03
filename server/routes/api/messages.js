@@ -10,7 +10,22 @@ router.post("/", async (req, res, next) => {
     }
     const senderId = req.user.id;
     const { recipientId, text, conversationId, sender } = req.body;
-
+    // if we want to clear the isRead property after a user focuses input
+    if (!text && !recipientId) {
+      const updateMessages = await Message.update(
+        {
+          isRead: 1,
+        },
+        {
+          where: {
+            senderId: sender,
+            conversationId: conversationId,
+            isRead: 0,
+          },
+        }
+      );
+      return res.json({ updateMessages, sender });
+    }
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
       const message = await Message.create({
