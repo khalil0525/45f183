@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Input = ({ otherUser, conversationId, user, postMessage }) => {
+const Input = ({ otherUser, conversationId, user, postMessage, messages }) => {
   const classes = useStyles();
   const [text, setText] = useState("");
 
@@ -37,6 +37,15 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
     await postMessage(reqBody);
     setText("");
   };
+  const handleFocus = async () => {
+    if (
+      messages.length > 0 &&
+      messages[messages.length - 1].senderId !== user.Id &&
+      !messages[messages.length - 1].isRead
+    ) {
+      console.log("Clear read messages");
+    }
+  };
 
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
@@ -48,6 +57,7 @@ const Input = ({ otherUser, conversationId, user, postMessage }) => {
           value={text}
           name="text"
           onChange={handleChange}
+          onFocus={handleFocus}
         />
       </FormControl>
     </form>
