@@ -58,6 +58,7 @@ const ActiveChat = ({
                   conversationId={conversation.id || null}
                   user={user}
                   postMessage={postMessage}
+                  messages={conversation.messages}
                 />
               </>
             )}
