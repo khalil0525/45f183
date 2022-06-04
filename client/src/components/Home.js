@@ -74,7 +74,8 @@ const Home = ({ user, logout }) => {
       const data = await saveMessage(body);
       console.log(data);
       console.log(body);
-      updateMessagesToReadInConversation({ data, body });
+
+      updateReadMessagesInConvo(data, body);
       readMessage(data, body);
     } catch (error) {
       console.error(error);
@@ -82,7 +83,7 @@ const Home = ({ user, logout }) => {
   };
 
   //ONLY WORKS FOR THE USER THAT IS CLEARING THE READ. NEEDS WORK
-  const updateMessagesToReadInConversation = useCallback(
+  const updateReadMessagesInConvo = useCallback(
     (data) => {
       // if sender isn't null, that means the message needs to be put in a brand new convo
       // make table of current users so we can lookup faster
@@ -220,18 +221,18 @@ const Home = ({ user, logout }) => {
     socket.on("add-online-user", addOnlineUser);
     socket.on("remove-offline-user", removeOfflineUser);
     socket.on("new-message", addMessageToConversation);
-    socket.on("read-messages", updateMessagesToReadInConversation);
+    socket.on("read-messages", updateReadMessagesInConvo);
     return () => {
       // before the component is destroyed
       // unbind all event handlers used in this component
       socket.off("add-online-user", addOnlineUser);
       socket.off("remove-offline-user", removeOfflineUser);
       socket.off("new-message", addMessageToConversation);
-      socket.off("read-messages", updateMessagesToReadInConversation);
+      socket.off("read-messages", updateReadMessagesInConvo);
     };
   }, [
     addMessageToConversation,
-    updateMessagesToReadInConversation,
+    updateReadMessagesInConvo,
     addOnlineUser,
     removeOfflineUser,
     socket,
