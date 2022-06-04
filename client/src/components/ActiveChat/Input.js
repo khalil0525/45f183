@@ -55,7 +55,6 @@ const Input = ({
         conversationId,
         sender: otherUser.id,
       };
-      console.log("test");
       await postUpdate(reqBody);
     }
   };
