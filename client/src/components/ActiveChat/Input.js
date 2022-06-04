@@ -46,9 +46,8 @@ const Input = ({
   };
   const handleFocus = async () => {
     if (
-      messages.length > 0 &&
-      messages[messages.length - 1].senderId === otherUser.id &&
-      !messages[messages.length - 1].isRead
+      messages[messages.length - 1]?.senderId === otherUser.id &&
+      !messages[messages.length - 1]?.isRead
     ) {
       const reqBody = {
         text: null,
@@ -56,6 +55,7 @@ const Input = ({
         conversationId,
         sender: otherUser.id,
       };
+      console.log("test");
       await postUpdate(reqBody);
     }
   };
