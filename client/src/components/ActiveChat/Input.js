@@ -51,7 +51,7 @@ const Input = ({
     ) {
       const reqBody = {
         text: null,
-        recipientId: user,
+        recipientId: user.id,
         conversationId,
         sender: otherUser.id,
       };
