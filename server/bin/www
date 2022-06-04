@@ -48,10 +48,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("read-messages", (data) => {
+    console.log(data);
     socket.broadcast.emit("read-messages", {
-      totalRead: data.totalRead,
       recipientId: data.recipientId,
-      conversationId: data.conversationId,
       messages: data.messages,
       sender: data.sender,
     });
