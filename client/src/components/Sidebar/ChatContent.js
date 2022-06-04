@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Badge } from "@material-ui/core";
@@ -41,10 +41,18 @@ const ChatContent = ({ conversation }) => {
   const { otherUser } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
 
-  const isMessageRead =
+  const hasUnreadMessages =
     conversation.messages[conversation.messages.length - 1]?.senderId ===
       otherUser.id &&
     !conversation.messages[conversation.messages.length - 1]?.isRead;
+
+  const countUnreadMessages = useMemo(() => {
+    if (hasUnreadMessages) {
+      return conversation.messages.filter((message) => !message.isRead).length;
+    } else {
+      return 0;
+    }
+  }, [conversation.messages, hasUnreadMessages]);
 
   return (
     <Box className={classes.root}>
@@ -53,14 +61,18 @@ const ChatContent = ({ conversation }) => {
           {otherUser.username}
         </Typography>
         <Typography
-          className={`${isMessageRead && classes.boldPreviewText} ${
+          className={`${hasUnreadMessages && classes.boldPreviewText} ${
             classes.previewText
           }`}
         >
           {latestMessageText}
         </Typography>
       </Box>
-      <Badge badgeContent={12} className={classes.badge} color="primary" />
+      <Badge
+        badgeContent={countUnreadMessages}
+        className={classes.badge}
+        color="primary"
+      />
     </Box>
   );
 };
