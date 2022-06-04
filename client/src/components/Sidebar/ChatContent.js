@@ -41,7 +41,7 @@ const ChatContent = ({ conversation }) => {
   const { otherUser } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
 
-  const messageRead =
+  const isMessageRead =
     conversation.messages[conversation.messages.length - 1]?.senderId ===
       otherUser.id &&
     !conversation.messages[conversation.messages.length - 1]?.isRead;
@@ -53,7 +53,7 @@ const ChatContent = ({ conversation }) => {
           {otherUser.username}
         </Typography>
         <Typography
-          className={`${messageRead && classes.boldPreviewText} ${
+          className={`${isMessageRead && classes.boldPreviewText} ${
             classes.previewText
           }`}
         >
