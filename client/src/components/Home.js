@@ -83,78 +83,28 @@ const Home = ({ user, logout }) => {
     }
   };
 
-  //ONLY WORKS FOR THE USER THAT IS CLEARING THE READ. NEEDS WORK
-  const updateReadMessagesInConvo = useCallback(
-    (data) => {
-      // if sender isn't null, that means the message needs to be put in a brand new convo
-      // make table of current users so we can lookup faster
+  const updateReadMessagesInConvo = useCallback((data) => {
+    const { messages, recipientId, sender } = data;
+    const { conversationId } = messages[0];
 
-      const { messages, recipientId, sender } = data;
-      const { conversationId } = messages[0];
-
-      if (recipientId === user.id || sender === user.id) {
-        setConversations((prev) =>
-          prev.map((convo) => {
-            if (convo.id === conversationId) {
-              const convoCopy = { ...convo };
-              convoCopy.messages = [
-                ...convoCopy.messages.slice(
-                  0,
-                  convoCopy.messages.length - messages.length
-                ),
-                ...messages,
-              ];
-              return convoCopy;
-            } else {
-              return convo;
-            }
-          })
-        );
-      }
-      // const conversation = conversations
-      //   ? conversations.find(
-      //       (conversation) => conversation.id === conversationId
-      //     )
-      //   : {};
-
-      // const newConversation = [...conversation.messages];
-      // const updateConversation = newConversation.map((message) => {
-      //   const index = messages.findIndex((msg) => msg.id === message.id);
-
-      //   if (index !== -1) {
-      //     return messages[index];
-      //   }
-      //   return message;
-      // });
-      // const conversation = conversations
-      //   ? conversations.find(
-      //       (conversation) => conversation.id === conversationId
-      //     )
-      //   : {};
-
-      // const newConversation = [...conversation.messages];
-      // const updateConversation = newConversation.map((message) => {
-      //   const index = messages.findIndex((msg) => msg.id === message.id);
-
-      //   if (index !== -1) {
-      //     return messages[index];
-      //   }
-      //   return message;
-      // });
-
-      //   const updateConversations = conversations.map((convo) => {
-      //     if (convo.id === conversationId) {
-      //       const messages = [...updateConversation];
-
-      //       return { ...convo, messages };
-      //     }
-      //     return { ...convo };
-      //   });
-      //   setConversations(updateConversations);
-      // }
-    },
-    [user.id]
-  );
+    setConversations((prev) =>
+      prev.map((convo) => {
+        if (convo.id === conversationId) {
+          const convoCopy = { ...convo };
+          convoCopy.messages = [
+            ...convoCopy.messages.slice(
+              0,
+              convoCopy.messages.length - messages.length
+            ),
+            ...messages,
+          ];
+          return convoCopy;
+        } else {
+          return convo;
+        }
+      })
+    );
+  }, []);
 
   const postMessage = async (body) => {
     try {
