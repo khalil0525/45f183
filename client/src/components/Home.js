@@ -63,8 +63,7 @@ const Home = ({ user, logout }) => {
   };
   const readMessage = (data, body) => {
     socket.emit("read-messages", {
-      totalRead: data.messages[0],
-      messages: data.messages[1],
+      messages: [...data.messages[1]],
       recipientId: body.recipientId,
       sender: data.sender,
     });
@@ -72,10 +71,12 @@ const Home = ({ user, logout }) => {
   const postUpdate = async (body) => {
     try {
       const data = await saveMessage(body);
-      console.log(data);
-      console.log(body);
-
-      updateReadMessagesInConvo(data, body);
+      const extractedData = {
+        messages: [...data.messages[1]],
+        recipientId: body.recipientId,
+        sender: body.sender,
+      };
+      updateReadMessagesInConvo(extractedData);
       readMessage(data, body);
     } catch (error) {
       console.error(error);
@@ -87,29 +88,29 @@ const Home = ({ user, logout }) => {
     (data) => {
       // if sender isn't null, that means the message needs to be put in a brand new convo
       // make table of current users so we can lookup faster
-      const { messages, sender } = data.data;
-      const { body } = data;
 
-      if (body.recipientId.id === user.id || sender === user.id) {
+      const { messages, recipientId, sender } = data;
+      const { conversationId } = messages[0];
+
+      if (recipientId === user.id || sender === user.id) {
         const conversation = conversations
           ? conversations.find(
-              (conversation) =>
-                conversation.id === messages[1][0].conversationId
+              (conversation) => conversation.id === conversationId
             )
           : {};
 
         const newConversation = [...conversation.messages];
         const updateConversation = newConversation.map((message) => {
-          const index = messages[1].findIndex((msg) => msg.id === message.id);
+          const index = messages.findIndex((msg) => msg.id === message.id);
 
           if (index !== -1) {
-            return messages[1][index];
+            return messages[index];
           }
           return message;
         });
-        let convoId = messages[1][0].conversationId;
+
         const updateConversations = conversations.map((convo) => {
-          if (convo.id === convoId) {
+          if (convo.id === conversationId) {
             const messages = [...updateConversation];
 
             return { ...convo, messages };
@@ -118,6 +119,20 @@ const Home = ({ user, logout }) => {
         });
         setConversations(updateConversations);
       }
+      // const { message, sender = null } = data;
+      //   setConversations((prev) =>
+      //     prev.map((convo) => {
+      //       if (convo.id === message.conversationId) {
+      //         const convoCopy = { ...convo };
+      //         convoCopy.messages = [...convoCopy.messages, message];
+      //         convoCopy.latestMessageText = message.text;
+      //         return convoCopy;
+      //       } else {
+      //         return convo;
+      //       }
+      //     })
+      //   );
+      // }
     },
     [setConversations, conversations, user.id]
   );
