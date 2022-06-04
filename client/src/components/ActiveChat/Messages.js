@@ -9,13 +9,12 @@ const Messages = (props) => {
   const getLastReadMessageId = useMemo(() => {
     for (let index = messages.length - 1; index >= 0; index--) {
       if (messages[index].isRead && messages[index].senderId === userId) {
-        return index;
+        return messages[index].id;
       }
     }
     return 0;
   }, [messages, userId]);
 
-  console.log(messages);
   return (
     <Box>
       {messages.map((message) => {
