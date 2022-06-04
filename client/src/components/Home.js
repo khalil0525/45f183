@@ -63,7 +63,7 @@ const Home = ({ user, logout }) => {
   };
   const readMessage = (data, body) => {
     socket.emit("read-messages", {
-      messages: [...data.messages[1]],
+      messages: data.messages[1],
       recipientId: body.recipientId,
       sender: data.sender,
     });
@@ -71,12 +71,13 @@ const Home = ({ user, logout }) => {
   const postUpdate = async (body) => {
     try {
       const data = await saveMessage(body);
-      const extractedData = {
-        messages: [...data.messages[1]],
+
+      const dataCombine = {
+        messages: data.messages[1],
         recipientId: body.recipientId,
         sender: body.sender,
       };
-      updateReadMessagesInConvo(extractedData);
+      updateReadMessagesInConvo(dataCombine);
       readMessage(data, body);
     } catch (error) {
       console.error(error);
@@ -84,7 +85,7 @@ const Home = ({ user, logout }) => {
   };
 
   const updateReadMessagesInConvo = useCallback((data) => {
-    const { messages, recipientId, sender } = data;
+    const { messages } = data;
     const { conversationId } = messages[0];
 
     setConversations((prev) =>
