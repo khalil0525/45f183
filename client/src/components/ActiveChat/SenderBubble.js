@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
     background: "#F4F6FA",
     borderRadius: "10px 10px 0 10px",
   },
-  avatar: {
+  readAvatar: {
     height: 20,
     width: 20,
     marginTop: 9,
@@ -45,7 +45,7 @@ const SenderBubble = ({ time, text, otherUser, isLastReadMessage }) => {
         <Avatar
           alt={otherUser.username}
           src={otherUser.photoUrl}
-          className={classes.avatar}
+          className={classes.readAvatar}
         />
       )}
     </Box>
