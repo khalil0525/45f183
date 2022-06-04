@@ -19,7 +19,7 @@ router.post("/", async (req, res, next) => {
         {
           where: {
             senderId: sender,
-            conversationId: conversationId,
+            conversationId,
             isRead: 0,
           },
           returning: true,

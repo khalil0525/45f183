@@ -63,6 +63,7 @@ const Home = ({ user, logout }) => {
   };
   const readMessage = (data, body) => {
     socket.emit("read-messages", {
+      totalRead: data.messages[0],
       messages: data.messages[1],
       recipientId: body.recipientId,
       sender: data.sender,
@@ -71,6 +72,8 @@ const Home = ({ user, logout }) => {
   const postUpdate = async (body) => {
     try {
       const data = await saveMessage(body);
+      console.log(data);
+      console.log(body);
       updateMessagesToReadInConversation({ data, body });
       readMessage(data, body);
     } catch (error) {

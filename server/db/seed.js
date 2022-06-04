@@ -22,12 +22,7 @@ async function seed() {
     photoUrl:
       "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/775db5e79c5294846949f1f55059b53317f51e30_s3back.png",
   });
-  const khalil = await User.create({
-    username: "khalil",
-    email: "khalil@email.com",
-    password: "gggabc123",
-    photoUrl: "",
-  });
+
   const santaigoConvo = await Conversation.create({
     user1Id: thomas.id,
     user2Id: santiago.id,
@@ -123,7 +118,18 @@ async function seed() {
         "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/9e2972c07afac45a8b03f5be3d0a796abe2e566e_ttq23y.png",
     }),
   ]);
-
+  const khalil = await User.create({
+    username: "khalil",
+    email: "khalil@email.com",
+    password: "gggabc123",
+    photoUrl: "",
+  });
+  const bales = await User.create({
+    username: "bales",
+    email: "bales@email.com",
+    password: "gggabc123",
+    photoUrl: "",
+  });
   console.log(`seeded users and messages`);
 }
 
