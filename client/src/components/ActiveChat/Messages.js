@@ -7,9 +7,9 @@ const Messages = (props) => {
   const { messages, otherUser, userId } = props;
 
   const getLastReadMessageId = useMemo(() => {
-    for (let index = messages.length - 1; index >= 0; index--) {
-      if (messages[index].isRead && messages[index].senderId === userId) {
-        return messages[index].id;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].isRead && messages[i].senderId === userId) {
+        return messages[i].id;
       }
     }
     return 0;
