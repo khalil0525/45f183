@@ -93,48 +93,67 @@ const Home = ({ user, logout }) => {
       const { conversationId } = messages[0];
 
       if (recipientId === user.id || sender === user.id) {
-        const conversation = conversations
-          ? conversations.find(
-              (conversation) => conversation.id === conversationId
-            )
-          : {};
-
-        const newConversation = [...conversation.messages];
-        const updateConversation = newConversation.map((message) => {
-          const index = messages.findIndex((msg) => msg.id === message.id);
-
-          if (index !== -1) {
-            return messages[index];
-          }
-          return message;
-        });
-
-        const updateConversations = conversations.map((convo) => {
-          if (convo.id === conversationId) {
-            const messages = [...updateConversation];
-
-            return { ...convo, messages };
-          }
-          return { ...convo };
-        });
-        setConversations(updateConversations);
+        setConversations((prev) =>
+          prev.map((convo) => {
+            if (convo.id === conversationId) {
+              const convoCopy = { ...convo };
+              convoCopy.messages = [
+                ...convoCopy.messages.slice(
+                  0,
+                  convoCopy.messages.length - messages.length
+                ),
+                ...messages,
+              ];
+              return convoCopy;
+            } else {
+              return convo;
+            }
+          })
+        );
       }
-      // const { message, sender = null } = data;
-      //   setConversations((prev) =>
-      //     prev.map((convo) => {
-      //       if (convo.id === message.conversationId) {
-      //         const convoCopy = { ...convo };
-      //         convoCopy.messages = [...convoCopy.messages, message];
-      //         convoCopy.latestMessageText = message.text;
-      //         return convoCopy;
-      //       } else {
-      //         return convo;
-      //       }
-      //     })
-      //   );
+      // const conversation = conversations
+      //   ? conversations.find(
+      //       (conversation) => conversation.id === conversationId
+      //     )
+      //   : {};
+
+      // const newConversation = [...conversation.messages];
+      // const updateConversation = newConversation.map((message) => {
+      //   const index = messages.findIndex((msg) => msg.id === message.id);
+
+      //   if (index !== -1) {
+      //     return messages[index];
+      //   }
+      //   return message;
+      // });
+      // const conversation = conversations
+      //   ? conversations.find(
+      //       (conversation) => conversation.id === conversationId
+      //     )
+      //   : {};
+
+      // const newConversation = [...conversation.messages];
+      // const updateConversation = newConversation.map((message) => {
+      //   const index = messages.findIndex((msg) => msg.id === message.id);
+
+      //   if (index !== -1) {
+      //     return messages[index];
+      //   }
+      //   return message;
+      // });
+
+      //   const updateConversations = conversations.map((convo) => {
+      //     if (convo.id === conversationId) {
+      //       const messages = [...updateConversation];
+
+      //       return { ...convo, messages };
+      //     }
+      //     return { ...convo };
+      //   });
+      //   setConversations(updateConversations);
       // }
     },
-    [setConversations, conversations, user.id]
+    [user.id]
   );
 
   const postMessage = async (body) => {
