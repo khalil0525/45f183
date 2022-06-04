@@ -44,8 +44,7 @@ const ChatContent = ({ conversation }) => {
   const messageRead =
     conversation.messages[conversation.messages.length - 1]?.senderId ===
       otherUser.id &&
-    !conversation.messages[conversation.messages.length - 1]?.isRead &&
-    classes.boldPreviewText;
+    !conversation.messages[conversation.messages.length - 1]?.isRead;
 
   return (
     <Box className={classes.root}>
@@ -53,7 +52,11 @@ const ChatContent = ({ conversation }) => {
         <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
-        <Typography className={`${messageRead} ${classes.previewText}`}>
+        <Typography
+          className={`${messageRead && classes.boldPreviewText} ${
+            classes.previewText
+          }`}
+        >
           {latestMessageText}
         </Typography>
       </Box>
