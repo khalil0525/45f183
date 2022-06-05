@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography, Badge } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Badge } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,13 +22,14 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
     fontWeight: "600",
   },
-  badge: {
-    borderRadius: 10,
-    backgroundColor: "#3F92FF",
+  badgeRoot: {
     alignSelf: "center",
     marginRight: 40,
-    colorPrimary: "#3F92FF",
-    padding: 0,
+  },
+  badgeInner: {
+    padding: "0 10px",
+    backgroundColor: "#3F92FF",
+    color: "#fff",
   },
 }));
 
@@ -70,8 +70,7 @@ const ChatContent = ({ conversation }) => {
       </Box>
       <Badge
         badgeContent={countUnreadMessages}
-        className={classes.badge}
-        color="primary"
+        classes={{ root: classes.badgeRoot, badge: classes.badgeInner }}
       />
     </Box>
   );
