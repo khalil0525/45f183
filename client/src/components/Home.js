@@ -87,7 +87,6 @@ const Home = ({ user, logout }) => {
   const updateReadMessagesInConvo = useCallback((data) => {
     const { messages } = data;
     const { conversationId } = messages[0];
-    console.log(messages);
     setConversations((prev) =>
       prev.map((convo) => {
         if (convo.id === conversationId) {
