@@ -55,7 +55,6 @@ const Home = ({ user, logout }) => {
   };
   const saveMessageRead = async (senderId) => {
     const { data } = await axios.patch(`/api/messages/read/${senderId}`);
-    console.log(data);
     return data;
   };
 
@@ -68,7 +67,7 @@ const Home = ({ user, logout }) => {
   };
   const readMessage = (data) => {
     socket.emit("read-messages", {
-      messages: data.messages[1],
+      messages: data.messages,
       recipientId: data.userId,
       sender: data.senderId,
     });
@@ -76,8 +75,10 @@ const Home = ({ user, logout }) => {
   const patchMessage = async (senderId) => {
     try {
       const data = await saveMessageRead(senderId);
-      updateReadMessagesInConvo(data);
-      readMessage(data);
+      // The API returns an array with total changes and an array of changed entries
+      const dataCopy = { ...data, messages: [...data.messages[1]] };
+      updateReadMessagesInConvo(dataCopy);
+      readMessage(dataCopy);
     } catch (error) {
       console.error(error);
     }
