@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { Conversation, Message } = require("../../db/models");
+const { Op } = require("sequelize");
 const onlineUsers = require("../../onlineUsers");
 
 // expects {recipientId, text, conversationId } in body (conversationId will be null if no conversation exists yet)
@@ -10,30 +11,13 @@ router.post("/", async (req, res, next) => {
     }
     const senderId = req.user.id;
     const { recipientId, text, conversationId, sender } = req.body;
-    // if we want to clear the isRead property after a user focuses input
-    if (text === null) {
-      const messages = await Message.update(
-        {
-          isRead: 1,
-        },
-        {
-          where: {
-            senderId: sender,
-            conversationId,
-            isRead: 0,
-          },
-          returning: true,
-        }
-      );
-      return res.json({ messages, sender });
-    }
+
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
       const message = await Message.create({
         senderId,
         text,
         conversationId,
-        isRead: 0,
       });
       return res.json({ message, sender });
     }
@@ -57,9 +41,35 @@ router.post("/", async (req, res, next) => {
       senderId,
       text,
       conversationId: conversation.id,
-      isRead: 0,
     });
     res.json({ message, sender });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/read/:senderId", async (req, res, next) => {
+  try {
+    const { senderId } = req.params;
+    const userId = req.user.id;
+
+    const conversation = await Conversation.findConversation(userId, senderId);
+    const messages = await Message.update(
+      { isRead: true },
+      {
+        where: {
+          [Op.and]: {
+            senderId,
+            conversationId: conversation.id,
+            isRead: false,
+          },
+        },
+        returning: true,
+      }
+    );
+
+    return res.json({ messages, userId, senderId });
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }
