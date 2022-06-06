@@ -20,7 +20,7 @@ const Input = ({
   conversationId,
   user,
   postMessage,
-  postUpdate,
+  patchMessage,
   messages,
 }) => {
   const classes = useStyles();
@@ -44,18 +44,11 @@ const Input = ({
     await postMessage(reqBody);
     setText("");
   };
+
   const handleFocus = async () => {
-    if (
-      messages[messages.length - 1]?.senderId === otherUser.id &&
-      !messages[messages.length - 1]?.isRead
-    ) {
-      const reqBody = {
-        text: null,
-        recipientId: user.id,
-        conversationId,
-        sender: otherUser.id,
-      };
-      await postUpdate(reqBody);
+    const { senderId, isRead } = messages[messages.length - 1] || {};
+    if (senderId === otherUser.id && !isRead) {
+      await patchMessage(senderId);
     }
   };
 
