@@ -53,6 +53,11 @@ const Home = ({ user, logout }) => {
     const { data } = await axios.post("/api/messages", body);
     return data;
   };
+  const saveMessageRead = async (senderId) => {
+    const { data } = await axios.patch(`/api/messages/read/${senderId}`);
+    console.log(data);
+    return data;
+  };
 
   const sendMessage = (data, body) => {
     socket.emit("new-message", {
@@ -61,24 +66,18 @@ const Home = ({ user, logout }) => {
       sender: data.sender,
     });
   };
-  const readMessage = (data, body) => {
+  const readMessage = (data) => {
     socket.emit("read-messages", {
       messages: data.messages[1],
-      recipientId: body.recipientId,
-      sender: data.sender,
+      recipientId: data.userId,
+      sender: data.senderId,
     });
   };
-  const postUpdate = async (body) => {
+  const patchMessage = async (senderId) => {
     try {
-      const data = await saveMessage(body);
-
-      const dataCombine = {
-        messages: data.messages[1],
-        recipientId: body.recipientId,
-        sender: body.sender,
-      };
-      updateReadMessagesInConvo(dataCombine);
-      readMessage(data, body);
+      const data = await saveMessageRead(senderId);
+      updateReadMessagesInConvo(data);
+      readMessage(data);
     } catch (error) {
       console.error(error);
     }
@@ -87,7 +86,7 @@ const Home = ({ user, logout }) => {
   const updateReadMessagesInConvo = useCallback((data) => {
     const { messages } = data;
     const { conversationId } = messages[0];
-
+    console.log(messages);
     setConversations((prev) =>
       prev.map((convo) => {
         if (convo.id === conversationId) {
@@ -273,7 +272,7 @@ const Home = ({ user, logout }) => {
           conversations={conversations}
           user={user}
           postMessage={postMessage}
-          postUpdate={postUpdate}
+          patchMessage={patchMessage}
         />
       </Grid>
     </>
