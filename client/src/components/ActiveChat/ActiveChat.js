@@ -24,7 +24,7 @@ const ActiveChat = ({
   conversations,
   activeConversation,
   postMessage,
-  postUpdate,
+  patchMessage,
 }) => {
   const classes = useStyles();
 
@@ -59,7 +59,7 @@ const ActiveChat = ({
                   conversationId={conversation.id || null}
                   user={user}
                   postMessage={postMessage}
-                  postUpdate={postUpdate}
+                  patchMessage={patchMessage}
                   messages={conversation.messages}
                 />
               </>
