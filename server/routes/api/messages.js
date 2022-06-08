@@ -69,7 +69,6 @@ router.patch("/read/:senderId", async (req, res, next) => {
     );
 
     return res.json({ messages, userId, senderId });
-    res.sendStatus(204);
   } catch (error) {
     next(error);
   }
