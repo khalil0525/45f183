@@ -10,6 +10,9 @@ const Message = db.define("message", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  readBy: {
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
+    allowNull: false,
+    defaultValue: [],
+  },
 });
-
-module.exports = Message;
