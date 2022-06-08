@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useCallback, useMemo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
@@ -28,15 +28,31 @@ const ActiveChat = ({
 }) => {
   const classes = useStyles();
 
-  const conversation = conversations
-    ? conversations.find(
-        (conversation) => conversation.otherUser.username === activeConversation
-      )
-    : {};
+  const conversation = useMemo(() => {
+    return conversations
+      ? conversations.find(
+          (conversation) =>
+            conversation.otherUser.username === activeConversation
+        )
+      : {};
+  }, [conversations, activeConversation]);
 
   const isConversation = (obj) => {
     return obj !== {} && obj !== undefined;
   };
+
+  useEffect(() => {
+    const { senderId, isRead } =
+      conversation?.messages[conversation.messages.length - 1] || {};
+    if (
+      conversation &&
+      conversation.otherUser &&
+      senderId === conversation.otherUser.id &&
+      !isRead
+    ) {
+      patchMessage(senderId);
+    }
+  }, [conversation, patchMessage]);
 
   return (
     <Box className={classes.root}>
