@@ -50,6 +50,9 @@ router.post("/", async (req, res, next) => {
 
 router.patch("/read/:senderId", async (req, res, next) => {
   try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
     const { senderId } = req.params;
     const userId = req.user.id;
 
