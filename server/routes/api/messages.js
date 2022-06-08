@@ -57,7 +57,7 @@ router.patch("/read/:senderId", async (req, res, next) => {
     const userId = req.user.id;
 
     const conversation = await Conversation.findConversation(userId, senderId);
-    const messages = await Message.update(
+    const updateMessages = await Message.update(
       { isRead: true },
       {
         where: {
@@ -71,6 +71,7 @@ router.patch("/read/:senderId", async (req, res, next) => {
       }
     );
 
+    const messages = updateMessages[1];
     return res.json({ messages, userId, senderId });
   } catch (error) {
     next(error);
