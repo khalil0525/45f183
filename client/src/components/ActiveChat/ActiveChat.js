@@ -59,8 +59,6 @@ const ActiveChat = ({
                   conversationId={conversation.id || null}
                   user={user}
                   postMessage={postMessage}
-                  patchMessage={patchMessage}
-                  messages={conversation.messages}
                 />
               </>
             )}
