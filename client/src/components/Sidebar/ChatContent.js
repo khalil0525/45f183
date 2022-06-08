@@ -34,9 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ChatContent = ({ conversation }) => {
   const classes = useStyles();
-  // useEffect(() => {
-  //   console.log(conversation.messages);
-  // });
+
   const { otherUser } = conversation;
   const latestMessageText = conversation.id && conversation.latestMessageText;
 
