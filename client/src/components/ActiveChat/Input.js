@@ -45,13 +45,6 @@ const Input = ({
     setText("");
   };
 
-  const handleFocus = async () => {
-    const { senderId, isRead } = messages[messages.length - 1] || {};
-    if (senderId === otherUser.id && !isRead) {
-      await patchMessage(senderId);
-    }
-  };
-
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <FormControl fullWidth hiddenLabel>
