@@ -75,10 +75,8 @@ const Home = ({ user, logout }) => {
   const patchMessage = async (senderId) => {
     try {
       const data = await saveMessageRead(senderId);
-      // The API returns an array with total changes and an array of changed entries
-      const dataCopy = { ...data, messages: [...data.messages[1]] };
-      updateReadMessagesInConvo(dataCopy);
-      readMessage(dataCopy);
+      updateReadMessagesInConvo(data);
+      readMessage(data);
     } catch (error) {
       console.error(error);
     }
