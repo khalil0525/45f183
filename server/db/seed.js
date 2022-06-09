@@ -112,7 +112,18 @@ async function seed() {
         "https://res.cloudinary.com/dmlvthmqr/image/upload/v1607914466/messenger/9e2972c07afac45a8b03f5be3d0a796abe2e566e_ttq23y.png",
     }),
   ]);
-
+  const khalil = await User.create({
+    username: "khalil",
+    email: "khalil@email.com",
+    password: "gggabc123",
+    photoUrl: "",
+  });
+  const bales = await User.create({
+    username: "bales",
+    email: "bales@email.com",
+    password: "gggabc123",
+    photoUrl: "",
+  });
   console.log(`seeded users and messages`);
 }
 
